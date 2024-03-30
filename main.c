@@ -32,7 +32,7 @@ GLuint generateShader() {
         "uniform mat4 MVP;\n"
         "void main()\n"
         "{\n"
-        "   gl_Position = MVP * vec4(aPos.x*0.4, aPos.y*0.4, 0.0, 1.0);\n"
+        "   gl_Position = MVP * vec4(aPos.x, aPos.y, 0.0, 1.0);\n"
         "}\0";
     const char *fragmentShaderSource = "#version 330 core\n"
         "out vec4 FragColour;\n"
@@ -89,7 +89,9 @@ typedef struct {
 
 void hcGridInit(hcGrid* grid, unsigned int x, unsigned int y) {
     grid->x = x; grid->y = y;
-    float data[4*(x+y)];
+    float* data = malloc(4*(x+y)*sizeof(float));
+
+    // float data[4*(x+y)];
     {
         float xRight = (float)x/2.0f;
         float yInitial = -((float)y-1)/2.0f;
@@ -115,12 +117,13 @@ void hcGridInit(hcGrid* grid, unsigned int x, unsigned int y) {
 
     glGenBuffers(1, &grid->VBO);
     glBindBuffer(GL_ARRAY_BUFFER, grid->VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(data), data, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float)*4*(x+y), data, GL_STATIC_DRAW);
 
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
     glBindVertexArray(GL_NONE);
+    free(data);
 }
 
 int main(int argv, char ** args) {
@@ -149,7 +152,7 @@ int main(int argv, char ** args) {
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     hcGrid grid;
-    unsigned int k = 25;
+    unsigned int k = 100;
     hcGridInit(&grid, k, k);
 
     GLuint shaderProgram = generateShader();
@@ -168,7 +171,7 @@ int main(int argv, char ** args) {
 
         mat4x4 m;
         mat4x4_identity(m);
-        mat4x4_scale_aniso(m, m, 5.0f/k, 5.0f/k, 5.0f/k);
+        mat4x4_scale_aniso(m, m, 2.0f/k, 2.0f/k, 2.0f/k);
         glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, (const GLfloat *)m);
 
         glDrawArrays(GL_LINES, 0, 2*(grid.x+grid.y));
