@@ -9,6 +9,7 @@ set(GLFW_BUILD_WAYLAND ON)
 
 add_subdirectory(glad)
 add_subdirectory(glfw)
+add_subdirectory(src)
 
 add_library(linmath 
     linmath.h/linmath.h
@@ -21,6 +22,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
     "${PROJECT_SOURCE_DIR}/glfw/include"
     "${PROJECT_SOURCE_DIR}/glad/include"
     "${PROJECT_SOURCE_DIR}/linmath.h"
+    "${PROJECT_SOURCE_DIR}/src"
     )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE 
