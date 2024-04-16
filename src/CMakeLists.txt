@@ -1,5 +1,4 @@
 set(SOURCE_FILES
-    global.h
     grid.h
     grid.c
     settings.h
