@@ -56,7 +56,7 @@ int main(int argv, char ** args) {
 
     loadSettings();
 
-    gladLoadGL();
+	gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
     glViewport(0, 0, 900, 900);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetKeyCallback(window, key_callback);
